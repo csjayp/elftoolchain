@@ -9,7 +9,7 @@
 
 .include "${TOP}/mk/elftoolchain.os.mk"
 
-.include <bsd.own.mk>
+.include <bsd.obj.mk>
 
 .if ${OS_HOST} == "Darwin" || ${OS_HOST} == "DragonFly" || \
 	${OS_HOST} == "FreeBSD" || ${OS_HOST} == "OpenBSD"
@@ -20,7 +20,7 @@ NOBINMODE?=	444		# Missing in OpenBSD's rule set.
 .PHONY:		incinstall
 includes:	${INCS}	incinstall
 .for inc in ${INCS}
-install incinstall::	${DESTDIR}${INCSDIR}/${inc}
+install incinstall:	${DESTDIR}${INCSDIR}/${inc}
 .PRECIOUS:	${DESTDIR}${INCSDIR}/${inc}
 ${DESTDIR}${INCSDIR}/${inc}: ${inc}
 	cmp -s $> $@ > /dev/null 2>&1 || \
