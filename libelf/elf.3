@@ -23,7 +23,7 @@
 .\"
 .\" $Id$
 .\"
-.Dd July 28, 2014
+.Dd October 10, 2018
 .Os
 .Dt ELF 3
 .Sh NAME
@@ -116,9 +116,12 @@ library offers translation facilities
 .Xr elf64_xlatetof 3
 and
 .Xr elf64_xlatetom 3 )
-to and from these
-representations and also provides higher-level APIs that retrieve and store
-data from the ELF object in a transparent manner.
+to and from these representations.
+It also provides higher-level APIs
+.Xr ( gelf_xlatetof 3 ,
+.Xr gelf_xlatetom 3 )
+that retrieve and store data from the ELF object in a class-agnostic
+manner.
 .Ss Library Working Version
 Conceptually, there are three version numbers associated with an
 application using the ELF library to manipulate ELF objects:
@@ -237,7 +240,6 @@ The
 .Vt Elf
 structure is opaque and has no members visible to the
 application.
-.\" TODO describe the Elf_Arhdr and Elf_Arsym structures.
 .It Vt Elf_Data
 An
 .Vt Elf_Data
@@ -529,9 +531,11 @@ back to the underlying file.
 Compute checksum of an ELF object.
 .It Fn elf_getident
 Retrieve the identification bytes for an ELF object.
-.It Fn elf_getshnum
+.It Fn elf_getphdrnum
+Retrieve the number of program headers in an ELF object.
+.It Fn elf_getshdrnum
 Retrieve the number of sections in an ELF object.
-.It Fn elf_getshstrndx
+.It Fn elf_getshdrstrndx
 Retrieve the section index of the section name string table in
 an ELF object.
 .It Fn elf_hash
@@ -601,6 +605,7 @@ library will reclaim the space used by the
 descriptor itself.
 .Sh SEE ALSO
 .Xr gelf 3 ,
+.Xr ar 5 ,
 .Xr elf 5
 .Sh HISTORY
 The original ELF(3) API was developed for Unix System V.

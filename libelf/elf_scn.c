@@ -51,8 +51,7 @@ _libelf_load_section_headers(Elf *e, void *ehdr)
 	int ec, swapbytes;
 	unsigned char *src;
 	size_t fsz, i, shnum;
-	int (*xlator)(unsigned char *_d, size_t _dsz, unsigned char *_s,
-	    size_t _c, int _swap);
+	_libelf_translator_function *xlator;
 
 	assert(e != NULL);
 	assert(ehdr != NULL);
@@ -84,7 +83,8 @@ _libelf_load_section_headers(Elf *e, void *ehdr)
 		CHECK_EHDR(e, eh64);
 	}
 
-	xlator = _libelf_get_translator(ELF_T_SHDR, ELF_TOMEMORY, ec);
+	xlator = _libelf_get_translator(ELF_T_SHDR, ELF_TOMEMORY, ec,
+	    _libelf_elfmachine(e));
 
 	swapbytes = e->e_byteorder != LIBELF_PRIVATE(byteorder);
 	src = e->e_rawfile + shoff;

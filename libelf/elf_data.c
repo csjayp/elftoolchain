@@ -43,8 +43,7 @@ elf_getdata(Elf_Scn *s, Elf_Data *ed)
 	size_t count, fsz, msz;
 	struct _Libelf_Data *d;
 	uint64_t sh_align, sh_offset, sh_size;
-	int (*xlate)(unsigned char *_d, size_t _dsz, unsigned char *_s,
-	    size_t _c, int _swap);
+	_libelf_translator_function *xlate;
 
 	d = (struct _Libelf_Data *) ed;
 
@@ -151,7 +150,8 @@ elf_getdata(Elf_Scn *s, Elf_Data *ed)
 
 	d->d_flags  |= LIBELF_F_DATA_MALLOCED;
 
-	xlate = _libelf_get_translator(elftype, ELF_TOMEMORY, elfclass);
+	xlate = _libelf_get_translator(elftype, ELF_TOMEMORY, elfclass,
+	    _libelf_elfmachine(e));
 	if (!(*xlate)(d->d_data.d_buf, (size_t) d->d_data.d_size,
 	    e->e_rawfile + sh_offset, count,
 	    e->e_byteorder != LIBELF_PRIVATE(byteorder))) {

@@ -41,11 +41,10 @@ static int
 _libelf_load_extended(Elf *e, int ec, uint64_t shoff, uint16_t phnum,
     uint16_t strndx)
 {
-	Elf_Scn *scn;
 	size_t fsz;
-	int (*xlator)(unsigned char *_d, size_t _dsz, unsigned char *_s,
-	    size_t _c, int _swap);
+	Elf_Scn *scn;
 	uint32_t shtype;
+	_libelf_translator_function *xlator;
 
 	assert(STAILQ_EMPTY(&e->e_u.e_elf.e_scn));
 
@@ -60,7 +59,8 @@ _libelf_load_extended(Elf *e, int ec, uint64_t shoff, uint16_t phnum,
 	if ((scn = _libelf_allocate_scn(e, (size_t) 0)) == NULL)
 		return (0);
 
-	xlator = _libelf_get_translator(ELF_T_SHDR, ELF_TOMEMORY, ec);
+	xlator = _libelf_get_translator(ELF_T_SHDR, ELF_TOMEMORY, ec,
+	    _libelf_elfmachine(e));
 	(*xlator)((unsigned char *) &scn->s_shdr, sizeof(scn->s_shdr),
 	    (unsigned char *) e->e_rawfile + shoff, (size_t) 1,
 	    e->e_byteorder != LIBELF_PRIVATE(byteorder));
@@ -166,7 +166,8 @@ _libelf_ehdr(Elf *e, int ec, int allocate)
 	if (e->e_cmd == ELF_C_WRITE)
 		return (ehdr);
 
-	xlator = _libelf_get_translator(ELF_T_EHDR, ELF_TOMEMORY, ec);
+	xlator = _libelf_get_translator(ELF_T_EHDR, ELF_TOMEMORY, ec,
+	    _libelf_elfmachine(e));
 	(*xlator)((unsigned char*) ehdr, msz, e->e_rawfile, (size_t) 1,
 	    e->e_byteorder != LIBELF_PRIVATE(byteorder));
 
