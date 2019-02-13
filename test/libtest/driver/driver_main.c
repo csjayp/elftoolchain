@@ -35,7 +35,7 @@
 
 #include "_elftc.h"
 #include "test.h"
-#include "test_runner.h"
+#include "test_case.h"
 
 ELFTC_VCSID("$Id$");
 
@@ -43,5 +43,7 @@ int
 main(int argc, char **argv)
 {
 	(void) test_cases;
+	(void) argc;
+	(void) argv;
 	exit(0);
 }

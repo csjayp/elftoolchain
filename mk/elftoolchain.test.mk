@@ -8,9 +8,8 @@
 .endif
 
 TEST_BASE=	$(TOP)/test/libtest
-TEST_LIB=	$(TEST_BASE)/lib
-TEST_DRIVER=	${TEST_BASE}/driver
-TEST_DRIVER_MAIN=	$(TEST_BASE)/driver/test_main.o
+TEST_LIB=	$(TEST_BASE)/lib	# The test(3) API.
+TEST_DRIVER=	${TEST_BASE}/driver	# A command-line driver for tests.
 
 CFLAGS+=	-I$(TEST_LIB) -I${TEST_DRIVER}
 
@@ -45,6 +44,6 @@ ${_TC_SRC}:	${_TEST_OBJS}
 .endif
 .endif
 
-LDADD+=		${TEST_DRIVER_MAIN} -L${TEST_LIB} -ltest
+LDADD+=		-L${TEST_LIB} -ltest -L${TEST_DRIVER} -ldriver
 
 .include "${TOP}/mk/elftoolchain.prog.mk"

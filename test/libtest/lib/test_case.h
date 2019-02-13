@@ -24,27 +24,35 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* $Id$ */
-
-/*
- * This C source defines a single test function named 'tf_helloworld',
- * that is not part of a test case, and lacking a description or tags.
- *
- * Since no test cases are specified in this file, the test function
- * would be assigned to the default test case (named 'default').
- *
- * Given the object file created from this source, the
- * 'make-test-scaffolding' utility will prepare the scaffolding
- * needed to build an executable containing the test function.
- */
+#ifndef	_LIBTEST_TEST_CASE_H_
+#define	_LIBTEST_TEST_CASE_H_
 
 #include "test.h"
 
 /*
- * Function names prefixed with 'tf_' name test functions.
+ * These structures describe the test cases that are linked into a
+ * test executable.
  */
-enum test_result
-tf_helloworld(test_case_state state)
-{
-	return (TEST_PASS);
-}
+
+/* A single test function, with its associated tags and description. */
+struct test_function_descriptor {
+	const char	*tf_name;	/* Test name. */
+	const char	*tf_description; /* Test description. */
+	const char	**tf_tags;	/* The tags for the test. */
+	test_function	*tf_func;	/* The function to invoke. */
+};
+
+/* A test case, with its associated tests. */
+struct test_case_descriptor {
+	const char	*tc_name;	/* Test case name. */
+	const char	*tc_description; /* Test case description. */
+	const char	**tc_tags;	/* Any associated tags. */
+	struct test_function_descriptor *tc_tests; /* Contained tests. */
+	const int	tc_count;	/* The number of tests. */
+};
+
+/* All test cases linked into the test binary. */
+extern struct test_case_descriptor test_cases[];
+extern const int test_case_count;
+
+#endif	/* _LIBTEST_TEST_CASE_H_ */
